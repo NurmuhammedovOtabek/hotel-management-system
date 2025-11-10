@@ -10,5 +10,6 @@ import { RolesModule } from '../roles/roles.module';
   imports:[TypeOrmModule.forFeature([Staff]), MailModule, RolesModule],
   controllers: [StaffsController],
   providers: [StaffsService],
+  exports:[StaffsService]
 })
 export class StaffsModule {}

@@ -34,6 +34,14 @@ export class RolesService {
     return allR;
   }
 
+  async findRole(name: string) {
+    const oneR = await this.roleRepo.findOneBy({ name });
+    if (!oneR) {
+      throw new NotFoundException("Bunday role yoq");
+    }
+    return oneR;
+  }
+
   async findOne(id: number) {
     const oneR = await this.roleRepo.findOneBy({ id });
     if (!oneR) {
@@ -52,14 +60,14 @@ export class RolesService {
         throw new ConflictException("Bunday role mavjud");
       }
     }
-    updateRoleDto.name = updateRoleDto.name?.toLowerCase()
+    updateRoleDto.name = updateRoleDto.name?.toLowerCase();
     await this.roleRepo.update({ id }, updateRoleDto);
     return this.findOne(id);
   }
 
   async remove(id: number) {
     const role = await this.findOne(id);
-    await this.roleRepo.delete({id})
-    return id
+    await this.roleRepo.delete({ id });
+    return id;
   }
 }

@@ -29,14 +29,14 @@ export class InventoryService {
   async findOne(id: number) {
     const oneI = await this.inverRepo.findOneBy({id})
     if(!oneI){
-      throw new NotFoundException("Bunday id yoq")
+      throw new NotFoundException("Bunday mahsulat id yoq")
     }
     return oneI
   }
 
   async update(id: number, dto: UpdateInventoryDto) {
     const item = await this.findOne(id)
-    if(item.quantity != dto.quantity){
+    if(item.itemName != dto.itemName){
       const item = await this.inverRepo.findOneBy({ itemName: dto.itemName });
       if (item) {
         throw new ConflictException("bunday mahsulot mavjud");

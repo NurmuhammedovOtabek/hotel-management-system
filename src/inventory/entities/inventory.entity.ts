@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { RoomInventory } from "../../room-inventory/entities/room-inventory.entity";
 
 @Entity()
 export class Inventory {
@@ -10,4 +11,7 @@ export class Inventory {
 
     @Column({nullable:false})
     quantity:number
+
+    @OneToMany(() => RoomInventory, (roomInventory) => roomInventory.room)
+    roomInventory: RoomInventory[];
 }

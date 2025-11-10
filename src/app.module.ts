@@ -9,6 +9,13 @@ import { RoomsModule } from './rooms/rooms.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { ServiceModule } from './service/service.module';
 import { RoomcleanModule } from './roomclean/roomclean.module';
+import { RoomInventoryModule } from './room-inventory/room-inventory.module';
+import { BookingsModule } from './bookings/bookings.module';
+import { BookingsGuestsModule } from './bookings-guests/bookings-guests.module';
+import { ServiceOrdersModule } from './service-orders/service-orders.module';
+import { PaymentsModule } from './payments/payments.module';
+import { ReviewsModule } from './reviews/reviews.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -31,6 +38,13 @@ import { RoomcleanModule } from './roomclean/roomclean.module';
     InventoryModule,
     ServiceModule,
     RoomcleanModule,
+    RoomInventoryModule,
+    BookingsModule,
+    BookingsGuestsModule,
+    ServiceOrdersModule,
+    PaymentsModule,
+    ReviewsModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

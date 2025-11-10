@@ -3,12 +3,14 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
+import { WinstonModule } from 'nest-winston';
+import { winstonConfig } from './common/logging/winston.logging';
 
 async function start() {
   try {
     const PORT = process.env.PORT ?? 3030;
     const app = await NestFactory.create(AppModule, {
-      logger: ["error", "warn"],
+      logger: WinstonModule.createLogger(winstonConfig),
     });
 
     app.setGlobalPrefix("api");

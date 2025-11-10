@@ -11,6 +11,10 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Country } from "../../country/entities/country.entity";
+import { Booking } from "../../bookings/entities/booking.entity";
+import { BookingsGuest } from "../../bookings-guests/entities/bookings-guest.entity";
+import { Payment } from "../../payments/entities/payment.entity";
+import { Review } from "../../reviews/entities/review.entity";
 const { v4: uuidv4 } = require("uuid");
 
 // const uuid = require("uuid");
@@ -52,7 +56,7 @@ export class User {
   @Column({ default: false })
   is_active: boolean;
 
-  @Column({default:"0"})
+  @Column({ default: "0" })
   token: string;
 
   @ManyToOne(() => Country, (country) => country.users)
@@ -65,9 +69,21 @@ export class User {
   @Column()
   activation_link: string;
 
- @CreateDateColumn()
-  createAt:Date
+  @CreateDateColumn()
+  createAt: Date;
 
   @UpdateDateColumn()
-  updateAt:Date  
+  updateAt: Date;
+
+  @OneToMany(() => Booking, (booking) => booking.user)
+  booking: Booking[];
+
+  @OneToMany(() => BookingsGuest, (bookingguest) => bookingguest.user)
+  bookingguest: Booking[];
+
+  @OneToMany(() => Payment, (payment) => payment.user)
+  payments: Payment[];
+
+  @OneToMany(() => Review, (review) => review.user)
+  reviews: Review[];
 }

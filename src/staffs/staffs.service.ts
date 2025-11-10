@@ -25,7 +25,7 @@ export class StaffsService {
 
   async create(dto: CreateStaffDto) {
     const verifyE = await this.staffRepo.findOneBy({ email: dto.email });
-    const role = await this.roleService.findOne(dto.roleId)
+    const role = await this.roleService.findOne(dto.roleId);
     if (verifyE) {
       throw new ConflictException("Bunday email mavjud");
     }
@@ -34,13 +34,12 @@ export class StaffsService {
       throw new ConflictException("Bunday telefon mavjud");
     }
     dto.password = await bcrypt.hash(dto.password, 7);
-    
+
     const newS = await this.staffRepo.save({
       ...dto,
       activation_link: uuidv4(),
-      roles:[role]
+      roles: [role],
     });
-
 
     try {
       await this.mailService.sendMail(newS, "staffs");
@@ -52,7 +51,7 @@ export class StaffsService {
   }
 
   async findAll() {
-    const allS = await this.staffRepo.find({relations:["roles"]});
+    const allS = await this.staffRepo.find({ relations: ["roles"] });
     if (allS.length === 0) {
       throw new NotFoundException("Malumot topilamdi");
     }
@@ -60,7 +59,7 @@ export class StaffsService {
   }
 
   async findEmail(email: string) {
-    const emailS = await this.staffRepo.findOneBy({ email });
+    const emailS = await this.staffRepo.findOne({where:{email}, relations:["roles"] });
     if (!emailS) {
       throw new NotFoundException("Bunday email yoq");
     }
@@ -68,9 +67,10 @@ export class StaffsService {
   }
 
   async findOne(id: number) {
-    const oneS = await this.staffRepo.findOneBy(
-      { id }
-    );
+    const oneS = await this.staffRepo.findOne({
+      where: { id },
+      relations: ["roles"],
+    });
     if (!oneS) {
       throw new NotFoundException("Bunday id yoq");
     }
@@ -85,7 +85,7 @@ export class StaffsService {
         throw new ConflictException("Bunday email mavjud");
       }
     }
-    if(staff.phone != dto.phone){
+    if (staff.phone != dto.phone) {
       const verifyP = await this.staffRepo.findOneBy({ phone: dto.phone });
       if (verifyP) {
         throw new ConflictException("Bunday telefon mavjud");
@@ -93,41 +93,39 @@ export class StaffsService {
     }
     const role = await this.roleService.findOne(dto.roleId!);
     const createStaff = {
-      id:staff.id,
+      id: staff.id,
       fullName: dto.fullName,
-        email:dto.email,
-        phone: dto.phone,
-        roles: [role]
+      email: dto.email,
+      phone: dto.phone,
+      roles: [role],
     };
-    const newS = await this.staffRepo.save(createStaff)
+    const newS = await this.staffRepo.save(createStaff);
 
-    return newS
+    return newS;
   }
 
   async remove(id: number) {
-    await this.findOne(id)
-    await this.staffRepo.delete({id})
-    return id
+    await this.findOne(id);
+    await this.staffRepo.delete({ id });
+    return id;
   }
 
   async activateUser(link: string) {
-      if (!link) {
-        throw new BadRequestException("Activation link not found");
-      }
-      const updateUser = await this.staffRepo.update(
-        {      
-          activation_link: link,
-          is_active: false,
-        },
-        { is_active: true },
-          
-        
-      );
-      if (updateUser.affected == 0) {
-        throw new BadRequestException("User already activetes");
-      }
-      return {
-        message: "User activated successFully"
-      };
+    if (!link) {
+      throw new BadRequestException("Activation link not found");
     }
+    const updateUser = await this.staffRepo.update(
+      {
+        activation_link: link,
+        is_active: false,
+      },
+      { is_active: true }
+    );
+    if (updateUser.affected == 0) {
+      throw new BadRequestException("User already activetes");
+    }
+    return {
+      message: "User activated successFully",
+    };
+  }
 }

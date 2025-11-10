@@ -29,7 +29,7 @@ export class UsersService {
     }
     const verfy3 = await this.userRepo.findOneBy({ passport: dto.passport });
     if (verfy3) {
-      throw new ConflictException("bunday raqam egasi mavjud");
+      throw new ConflictException("bunday passport egasi mavjud");
     }
     await this.countryService.findOne(dto.countryId)
 
@@ -46,6 +46,14 @@ export class UsersService {
     }
 
     return { message: "Emailga hat yuborildi", data: newU };
+  }
+
+  async findEmail(email: string){
+    const emailU = await this.userRepo.findOneBy({email:email})
+    if(!emailU){
+      throw new NotFoundException("Parol yoki email email notog'ri")
+    }
+    return emailU
   }
 
   async findAll() {

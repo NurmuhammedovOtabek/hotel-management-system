@@ -1,4 +1,7 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Roomclean } from "../../roomclean/entities/roomclean.entity";
+import { RoomInventory } from "../../room-inventory/entities/room-inventory.entity";
+import { Booking } from "../../bookings/entities/booking.entity";
 
 export enum RType {
   standard = "standard",
@@ -21,7 +24,6 @@ export enum BadCount {
 
 export enum Status {
   available = "available",
-  booked = "booked",
   maintenance = "maintenance",
   out_of_service = "out_of_service",
 }
@@ -49,7 +51,7 @@ export class Room {
   @Column()
   pricePerNight: number;
 
-  @Column({default:Status.available})
+  @Column({ default: Status.available })
   status: Status;
 
   @Column()
@@ -59,8 +61,17 @@ export class Room {
   amenities: string;
 
   @CreateDateColumn()
-  createAt: Date
+  createAt: Date;
 
   @UpdateDateColumn()
-  updateAt:Date
+  updateAt: Date;
+
+  @OneToMany(() => Roomclean, (roomclean) => roomclean.room)
+  roomclean: Roomclean[];
+
+  @OneToMany(() => RoomInventory, (roomInventory) => roomInventory.room)
+  roomInventory: RoomInventory[];
+
+  @OneToMany(() => Booking, (booking) => booking.room)
+  booking: Booking[];
 }

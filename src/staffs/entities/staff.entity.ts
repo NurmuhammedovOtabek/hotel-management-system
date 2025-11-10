@@ -1,5 +1,15 @@
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { Role } from "../../roles/entities/role.entity";
+import { Roomclean } from "../../roomclean/entities/roomclean.entity";
 
 @Entity()
 export class Staff {
@@ -21,9 +31,6 @@ export class Staff {
   @Column({ default: false })
   is_active: boolean;
 
-  @Column({default: new Date()})
-  last_login: Date;
-
   @Column({ default: "0" })
   token: string;
 
@@ -39,4 +46,7 @@ export class Staff {
   @ManyToMany(() => Role, (role) => role.staffs)
   @JoinTable() // ❗ Bu faqat bitta tomonda bo‘lishi kerak (owner tomonda)
   roles: Role[];
+
+  @OneToMany(() => Roomclean, (roomclean) => roomclean.staff)
+  roomclean: Roomclean[];
 }

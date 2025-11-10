@@ -29,7 +29,7 @@ export class RoomsService {
   async findOne(id: number) {
     const oneR = await this.roomRepo.findOneBy({id})
     if(!oneR){
-      throw new NotFoundException("Bunday id yoq")
+      throw new NotFoundException("Bunday xona yoq")
     }
     return oneR
   }
@@ -52,5 +52,30 @@ export class RoomsService {
     await this.findOne(id);
     await this.roomRepo.delete({id})
     return id
+  }
+
+  async bestRoom(){
+    const topRooms = await this.roomRepo
+      .createQueryBuilder("booking")
+      .leftJoin("booking.room", "room")
+      .select("room.id", "roomId")
+      .addSelect("room.roomNumber", "roomNumber")
+      .addSelect("SUM(booking.totalPrice)", "totalEarnings")
+      .groupBy("room.id")
+      .orderBy("totalEarnings", "DESC")
+      .limit(5)
+      .getRawMany();
+
+  }
+
+  async getRoomsByAmenity(amenityName: string): Promise<Room[]> {
+    const searchKey = amenityName.trim()
+    
+    const rooms = await this.roomRepo.createQueryBuilder("room")
+      .where("LOWER(room.amenities) ILIKE :searchPattern", { 
+        searchPattern: `%${searchKey}%` 
+      }).getMany(); 
+
+    return rooms;
   }
 }

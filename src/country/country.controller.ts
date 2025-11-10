@@ -1,9 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { CountryService } from './country.service';
 import { CreateCountryDto } from './dto/create-country.dto';
 import { UpdateCountryDto } from './dto/update-country.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { Roles } from '../common/decorators/role.decorator';
+import { RolesGuard } from '../common/guards/role.guard';
+import { AccessTokenGuard } from '../common/guards';
 
+
+@Roles("supperadmin")
+@UseGuards(RolesGuard)
+@UseGuards(AccessTokenGuard)
 @ApiBearerAuth()
 @Controller('country')
 export class CountryController {
