@@ -44,7 +44,7 @@ export class Staff {
   updateAt: Date;
 
   @ManyToMany(() => Role, (role) => role.staffs)
-  @JoinTable() // ❗ Bu faqat bitta tomonda bo‘lishi kerak (owner tomonda)
+  @JoinTable() 
   roles: Role[];
 
   @OneToMany(() => Roomclean, (roomclean) => roomclean.staff)

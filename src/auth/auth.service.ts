@@ -29,14 +29,12 @@ export class AuthService {
       roles = [user.role];
     } else if ("roles" in user && Array.isArray((user as any).roles)) {
       const maybeRoles = (user as any).roles;
-      console.log(maybeRoles, "m");
 
       const resolved =
         typeof maybeRoles.then === "function" ? await maybeRoles : maybeRoles;
       console.log(resolved);
       roles = resolved.map((r: any) => r.name);
     }
-    console.log("o", roles);
 
     const paylod = {
       id: user.id,
